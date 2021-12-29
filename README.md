@@ -1,1 +1,1 @@
-# PyTorch-MNIST-HandWritten-Digit-Recognition-CNN
+# PyTorch-MNIST-HandWritten-Digit-Recognition-Multi-Layer-Perceptron
