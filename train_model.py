@@ -1,15 +1,15 @@
-from digit_classifier_model import MultiLayerPerceptron
+from sudokunet import SudokuNet
 from torch.utils.data import DataLoader
 from torch import nn, optim, save, no_grad
 import torch
 from torchvision import datasets, transforms
 
 LR = 1e-3
-BS = 64
-EPOCHS = 10
+BS = 128
+EPOCHS = 17
 
 transform = transforms.Compose(
-    [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,)), ])
+    [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3801,)), ])
 
 trainset = datasets.MNIST(
     r'..\input\MNIST', download=True, train=True, transform=transform)
@@ -37,7 +37,8 @@ for e in range(EPOCHS):
     test_cc = 0
     for batch_id, (X_train, y_train) in enumerate(trainloader):
         batch_id += 1
-        y_pred = model(X_train.view(X_train.shape[0], -1))
+        #y_pred = model(X_train.view(X_train.shape[0], -1))
+        y_pred = model(X_train)
         loss = criterion(y_pred, y_train)
 
         predicted = torch.max(y_pred.data, 1)[1]
@@ -48,20 +49,23 @@ for e in range(EPOCHS):
         loss.backward()
         optimizer.step()
 
-    print("X___ : ",X_train.shape[0])
-    print(f'epoch: {e:2} batch: {batch_id:4} [{batch_id*len(X_train):6}/60000] Train loss: {loss.item():10.8f} Train accuracy: {train_cc.item()/len(trainloader.dataset):5.4f}%')
+   # print("X___ : ",X_train.shape[0])
+    print(f'epoch: {e:2} Train loss: {loss.item():10.8f} Train accuracy: {train_cc.item()/len(trainloader.dataset):5.4f}%')
     train_losses.append(loss)
     train_correct.append(train_cc)
 
     with no_grad():
         for batch_id, (X_test, y_test) in enumerate(testloader):
-            y_val = model(X_test.view(X_test.shape[0], -1))
+            #y_val = model(X_test.view(X_test.shape[0], -1))
+            y_val = model(X_test)
             predicted = torch.max(y_val.data, 1)[1]
             test_cc += (predicted == y_test).sum()
 
     loss = criterion(y_val, y_test)
     test_losses.append(loss)
     test_correct.append(test_cc)
+    print(f'epoch: {e:2} Test loss: {loss.item():10.8f} Test accuracy: {test_cc.item()/len(testloader.dataset):5.4f}%')
 
+#print(f'Test Accuracy: {test_correct[-1].item()*100/10000:.3f}%')
 save(model, 'mnist_model.pt')
 print("Model saved")
