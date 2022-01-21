@@ -1,1 +1,1 @@
-# PyTorch-MNIST-HandWritten-Digit-Recognition-Multi-Layer-Perceptron
+# PyTorch-MNIST-QMNIST-HandWritten-Digit-Recognition-Multi-Layer-Perceptron
