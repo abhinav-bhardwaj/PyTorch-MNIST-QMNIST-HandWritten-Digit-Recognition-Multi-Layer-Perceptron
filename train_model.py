@@ -33,7 +33,6 @@ trainloader = DataLoader(trainset, batch_size=BS, shuffle=True)
 valloader = DataLoader(valset, batch_size=BS, shuffle=True)
 testloader = DataLoader(testset, batch_size=BS, shuffle=True)
 
-#print("AAAAAAAAAAAAAAAAAAAAA")
 #print(testset.targets.cpu().detach().numpy())
 #print(trainset.dataset.classes)
 
